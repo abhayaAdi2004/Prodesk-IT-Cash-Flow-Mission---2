@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cash-Flow — A sleek salary and expense tracker dashboard. Input your salary, add expenses, and watch your remaining balance update in real-time." />
+  <title>Cash-Flow | Salary &amp; Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Cursor spotlight glow -->
+  <div id="cursor-glow" aria-hidden="true"></div>
+
+  <!-- ═══════════════ Background blobs ═══════════════ -->
+  <div class="bg-blob blob-1" aria-hidden="true"></div>
+  <div class="bg-blob blob-2" aria-hidden="true"></div>
+  <div class="bg-blob blob-3" aria-hidden="true"></div>
+
+  <!-- ═══════════════ Header ═══════════════ -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">💰</span>
+      <h1>Cash-Flow</h1>
+    </div>
+    <p class="tagline">Salary &amp; Expense Tracker</p>
+    <div class="currency-converter" style="margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;">
+      <label for="currency-selector" style="color: var(--clr-text-muted); font-size: var(--fs-sm);">Currency:</label>
+      <select id="currency-selector" class="form-input" style="width: auto; padding: 4px 10px; margin-bottom: 0;">
+        <option value="INR">INR (₹)</option>
+        <option value="USD">USD ($)</option>
+        <option value="EUR">EUR (€)</option>
+        <option value="GBP">GBP (£)</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- ═══════════════ Main ═══════════════ -->
+  <main class="dashboard">
+
+    <!-- ──── Summary Cards ──── -->
+    <section class="summary-cards" aria-label="Financial summary">
+      <div class="card card-salary" id="card-salary">
+        <div class="card-icon">💵</div>
+        <div class="card-info">
+          <span class="card-label">Total Salary</span>
+          <span class="card-value" id="display-salary">₹0</span>
+        </div>
+      </div>
+
+      <div class="card card-expenses" id="card-expenses">
+        <div class="card-icon">🛒</div>
+        <div class="card-info">
+          <span class="card-label">Total Expenses</span>
+          <span class="card-value" id="display-expenses">₹0</span>
+        </div>
+      </div>
+
+      <div class="card card-balance" id="card-balance">
+        <div class="card-icon">🏦</div>
+        <div class="card-info">
+          <span class="card-label">Remaining Balance</span>
+          <span class="card-value" id="display-balance">₹0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──── Content Grid ──── -->
+    <div class="content-grid">
+
+      <!-- ── Form Panel ── -->
+      <section class="panel form-panel" aria-label="Add salary and expenses">
+        <h2 class="panel-title">Add Details</h2>
+
+        <!-- Salary Form -->
+        <form id="salary-form" class="form-group" autocomplete="off">
+          <label for="salary-input" class="form-label">Monthly Salary (₹)</label>
+          <div class="input-row">
+            <input
+              type="number"
+              id="salary-input"
+              class="form-input"
+              placeholder="e.g. 50000"
+              min="0"
+              required
+            />
+            <button type="submit" id="set-salary-btn" class="btn btn-salary">Set Salary</button>
+          </div>
+        </form>
+
+        <div class="divider"></div>
+
+        <!-- Expense Form -->
+        <form id="expense-form" class="form-group" autocomplete="off">
+          <label for="expense-name" class="form-label">Expense Name</label>
+          <input
+            type="text"
+            id="expense-name"
+            class="form-input"
+            placeholder="e.g. Rent, Groceries"
+            required
+          />
+
+          <label for="expense-amount" class="form-label">Expense Amount (₹)</label>
+          <div class="input-row">
+            <input
+              type="number"
+              id="expense-amount"
+              class="form-input"
+              placeholder="e.g. 8000"
+              min="1"
+              required
+            />
+            <button type="submit" id="add-expense-btn" class="btn btn-expense">Add Expense</button>
+          </div>
+        </form>
+
+        <!-- Toast message -->
+        <div class="toast" id="toast" role="alert"></div>
+      </section>
+
+      <!-- ── Expense List Panel ── -->
+      <section class="panel list-panel" aria-label="Expense list">
+        <div class="panel-header">
+          <h2 class="panel-title">Expenses</h2>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-clear" id="download-report-btn" title="Download Report as PDF" style="color: var(--clr-accent-blue); border-color: var(--clr-border);">📄 Report</button>
+            <button class="btn btn-clear" id="clear-all-btn" title="Clear all expenses">Clear All</button>
+          </div>
+        </div>
+
+        <ul class="expense-list" id="expense-list">
+          <!-- Populated by JS -->
+        </ul>
+
+        <div class="empty-state" id="empty-state">
+          <span class="empty-icon">📋</span>
+          <p>No expenses yet. Add one above!</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ──── Chart Panel ──── -->
+    <section class="panel chart-panel" aria-label="Financial Overview Chart">
+      <h2 class="panel-title" style="text-align: center;">Overview</h2>
+      <div class="chart-container">
+        <canvas id="balance-chart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════ Footer ═══════════════ -->
+  <footer class="footer">
+    <p>Built with ❤️ &mdash; Cash-Flow &copy; 2026</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
