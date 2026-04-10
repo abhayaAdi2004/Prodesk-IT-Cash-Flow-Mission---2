@@ -1,0 +1,4 @@
+Asynchronous API Integration: Integrated third-party REST APIs to fetch real-time exchange rates, dynamically recalculating and rendering cross-currency financial data across the entire dashboard without page reloads.
+Client-Side Document Generation: Engineered an on-the-fly PDF report export system utilizing jsPDF, allowing users to dynamically compile and download formatted, paginated financial statements directly from the browser.
+Reactive Data Visualization & State Management: Implemented persistent local storage architectures alongside Chart.js to create real-time, reactive data visualizations that instantly reflect budget changes and trigger automated low-balance warning thresholds.
+Modern UI/UX Architecture: Designed a fully responsive, state-driven interface featuring glassmorphism micro-animations, complex DOM manipulation, and integrated theme lifecycle management (Dark Mode).
